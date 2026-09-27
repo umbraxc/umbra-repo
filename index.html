@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install Umbra Wiki on Arch Linux</title>
+<meta name="description" content="Install Umbra Wiki, the offline survival assistant, on Arch Linux from its signed pacman repository.">
+<link rel="icon" href="img/logo.svg">
+<style>
+  :root {
+    --bg: #090909; --bg1: #0f0f0f; --bg2: #151515; --line: #2a2a2a;
+    --fg: #cbcbcb; --bright: #f0f0f0; --dim: #96969a; --faint: #66666a;
+    --signal: #e8d27c; --accent: #e68e0d; --net: #5fb8c9; --red: #e06a6a;
+    --font: "JetBrains Mono", "JetBrainsMono Nerd Font", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); }
+  body { margin: 0; color: var(--fg); font: 15px/1.7 var(--font); }
+  a { color: var(--signal); }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 22px 60px; }
+  .hazard { height: 4px; background: repeating-linear-gradient(-45deg, var(--signal) 0 10px, transparent 10px 20px); opacity: .7; }
+  header { display: flex; align-items: center; gap: 16px; padding: 26px 0 8px; }
+  header img { width: 52px; height: 52px; }
+  .brand { font-weight: 800; letter-spacing: .28em; color: var(--bright); font-size: 18px; }
+  .brand b { color: var(--signal); }
+  .tag { font-size: 11px; letter-spacing: .3em; color: var(--dim); }
+  h1 { font-size: 26px; color: var(--bright); margin: 26px 0 6px; letter-spacing: .02em; }
+  h2 { font-size: 13px; letter-spacing: .3em; color: var(--signal); margin: 46px 0 12px; text-transform: uppercase; }
+  .lead { color: var(--fg); font-size: 16px; }
+  .hero { margin: 22px 0 6px; border: 1px solid var(--line); display: block; width: 100%; height: auto; }
+  .caption { font-size: 12px; color: var(--faint); margin: 0 0 8px; }
+  .card { position: relative; background: var(--bg1); border: 1px solid var(--line); padding: 18px 20px; margin: 14px 0; }
+  .card::before, .card::after { content: ""; position: absolute; width: 14px; height: 14px; border: 2px solid var(--signal); }
+  .card::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+  .card::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+  .step { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 6px 14px; }
+  .step > :not(.num) { grid-column: 2; min-width: 0; }   /* long commands scroll inside their box */
+  .num { grid-column: 1; grid-row: 1; width: 38px; height: 38px; display: grid; place-items: center; background: var(--signal); color: var(--bg); font-weight: 800; font-size: 17px; }
+  .step h3 { margin: 4px 0 0; color: var(--bright); font-size: 16px; }
+  .why { color: var(--dim); font-size: 13.5px; margin: 0; }
+  .cmd { position: relative; margin: 8px 0 2px; background: #050505; border: 1px solid var(--line); border-left: 3px solid var(--signal); }
+  /* Long commands wrap rather than scroll; the copy button copies them whole. */
+  .cmd pre { margin: 0; padding: 12px 88px 12px 14px; color: var(--bright); font: 13.5px/1.6 var(--font);
+    white-space: pre-wrap; word-break: break-all; }
+  .term pre, table { scrollbar-color: #333 #050505; scrollbar-width: thin; }
+  .cmd pre .p { color: var(--signal); user-select: none; }
+  .copy { position: absolute; top: 8px; right: 8px; font: 700 11px var(--font); letter-spacing: .15em; padding: 6px 10px; cursor: pointer; color: var(--bg); background: var(--signal); border: 0; }
+  .copy.done { background: var(--net); }
+  .note { font-size: 13.5px; color: var(--fg); border-left: 2px solid var(--net); padding: 4px 0 4px 12px; margin: 10px 0 0; }
+  .fpr { color: var(--signal); word-break: break-all; }
+  .term { background: #050505; border: 1px solid var(--line); margin: 12px 0; }
+  .term .bar { display: flex; gap: 6px; align-items: center; padding: 7px 12px; border-bottom: 1px solid var(--line); background: var(--bg2); font-size: 11px; color: var(--faint); letter-spacing: .15em; }
+  .term .bar i { width: 10px; height: 10px; border-radius: 50%; background: #333; display: inline-block; }
+  .term pre { margin: 0; padding: 14px 16px; overflow-x: auto; font: 12.5px/1.55 var(--font); color: var(--fg); }
+  .term .c { color: var(--signal); }
+  .term .ok { color: #7ad08a; }
+  .term .d { color: var(--faint); }
+  .term .m { color: var(--net); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid2 img { width: 100%; height: auto; border: 1px solid var(--line); display: block; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  td, th { text-align: left; padding: 8px 10px; border-bottom: 1px dashed var(--line); vertical-align: top; }
+  th { color: var(--dim); font-weight: 400; letter-spacing: .15em; font-size: 11px; }
+  code { color: var(--signal); background: var(--bg2); padding: 1px 5px; font-size: 13px; }
+  details { margin: 10px 0; }
+  summary { cursor: pointer; color: var(--bright); }
+  footer { margin-top: 50px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--faint); }
+  @media (max-width: 640px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .step { grid-template-columns: minmax(0, 1fr); }
+    .step > :not(.num) { grid-column: 1; }
+    h1 { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+<div class="hazard"></div>
+<div class="wrap">
+
+<header>
+  <img src="img/logo.svg" alt="">
+  <div>
+    <div class="brand">UMBRA <b>//</b> WIKI</div>
+    <div class="tag">OFFLINE SURVIVAL INTELLIGENCE</div>
+  </div>
+</header>
+
+<h1>Install Umbra Wiki on Arch Linux</h1>
+<p class="lead">Umbra Wiki is an offline survival assistant: a local AI that answers from a library
+stored on your own computer, cites its sources, and keeps working with no internet.
+This page installs it from <b>[umbra]</b>, its signed pacman repository, so it installs and
+updates like any other Arch software.</p>
+
+<img class="hero" src="img/hero.png" alt="Umbra Wiki's start screen">
+<p class="caption">Umbra Wiki's start screen. More on <a href="https://github.com/umbraxc/omarchy-umbra">GitHub</a>.</p>
+
+<h2>Install in four steps</h2>
+<p>Open a terminal and run these one at a time. Each asks for your password
+(<code>sudo</code>) because it changes system settings. Copy buttons are on the right.</p>
+
+<div class="card step">
+  <div class="num">1</div>
+  <h3>Trust the Umbra signing key</h3>
+  <div class="cmd"><pre><span class="p">$ </span>curl -sL https://umbraxc.github.io/umbra-repo/umbra.gpg | sudo pacman-key --add -
+<span class="p">$ </span>sudo pacman-key --lsign-key E50B101F98529A32564FDD3B37A6D2DA9E6A0F0B</pre>
+    <button class="copy" data-copy="curl -sL https://umbraxc.github.io/umbra-repo/umbra.gpg | sudo pacman-key --add -
+sudo pacman-key --lsign-key E50B101F98529A32564FDD3B37A6D2DA9E6A0F0B">COPY</button></div>
+  <p class="why">Every Umbra package is signed with this key. You import it once and mark it as trusted, and pacman
+  then checks the signature on every download and refuses anything that was changed along the way.
+  The key's fingerprint is <span class="fpr">E50B 101F 9852 9A32 564F DD3B 37A6 D2DA 9E6A 0F0B</span>; it's also shown on the
+  <a href="https://github.com/umbraxc/omarchy-umbra">project page</a>.</p>
+</div>
+
+<div class="card step">
+  <div class="num">2</div>
+  <h3>Add the [umbra] repository</h3>
+  <div class="cmd"><pre><span class="p">$ </span>printf '\n[umbra]\nServer = https://umbraxc.github.io/umbra-repo/$arch\n' | sudo tee -a /etc/pacman.conf</pre>
+    <button class="copy" data-copy="printf '\n[umbra]\nServer = https://umbraxc.github.io/umbra-repo/$arch\n' | sudo tee -a /etc/pacman.conf">COPY</button></div>
+  <p class="why">This adds two lines to the end of <code>/etc/pacman.conf</code>, pacman's settings file, telling it
+  where Umbra's packages live. If you prefer to edit it yourself (<code>sudo nano /etc/pacman.conf</code>), the end
+  of the file should read:</p>
+  <div class="cmd"><pre>[umbra]
+Server = https://umbraxc.github.io/umbra-repo/$arch</pre></div>
+</div>
+
+<div class="card step">
+  <div class="num">3</div>
+  <h3>Install Umbra Wiki</h3>
+  <div class="cmd"><pre><span class="p">$ </span>sudo pacman -Sy umbra-wiki</pre>
+    <button class="copy" data-copy="sudo pacman -Sy umbra-wiki">COPY</button></div>
+  <p class="why">pacman refreshes its package lists (now including [umbra]), then installs Umbra Wiki and everything it
+  needs: Ollama (the local AI engine), the library server, the window toolkit and the font.</p>
+</div>
+
+<div class="card step">
+  <div class="num">4</div>
+  <h3>Start the AI engine and open Umbra</h3>
+  <div class="cmd"><pre><span class="p">$ </span>sudo systemctl enable --now ollama
+<span class="p">$ </span>umbra-wiki</pre>
+    <button class="copy" data-copy="sudo systemctl enable --now ollama
+umbra-wiki">COPY</button></div>
+  <p class="why">The first line starts Ollama now and at every boot (only needed once). Then open Umbra from your app
+  launcher or with <code>umbra-wiki</code>: its welcome tour picks the AI model and the offline library that suit your
+  computer, and downloads them in the background.</p>
+</div>
+
+<h2>What it looks like</h2>
+<p>A real installation, as it appears in the terminal:</p>
+<div class="term">
+  <div class="bar"><i></i><i></i><i></i>&nbsp; TERMINAL</div>
+<pre><span class="c">$ curl -sL https://umbraxc.github.io/umbra-repo/umbra.gpg | sudo pacman-key --add -</span>
+<span class="d">==> Updating trust database...</span>
+<span class="c">$ sudo pacman-key --lsign-key E50B101F98529A32564FDD3B37A6D2DA9E6A0F0B</span>
+  -> Locally signed 1 key.
+<span class="d">==> Updating trust database...</span>
+<span class="c">$ printf '\n[umbra]\nServer = https://umbraxc.github.io/umbra-repo/$arch\n' | sudo tee -a /etc/pacman.conf</span>
+[umbra]
+Server = https://umbraxc.github.io/umbra-repo/$arch
+<span class="c">$ sudo pacman -Sy umbra-wiki</span>
+:: Synchronizing package databases...
+ core downloading...
+ extra downloading...
+ umbra downloading...
+resolving dependencies...
+Package (1)       New Version  Net Change  Download Size
+umbra/umbra-wiki  3.1.0-1        1.13 MiB       0.64 MiB
+:: Proceed with installation? [Y/n] y
+checking keyring...
+<span class="ok">checking package integrity...</span>
+installing umbra-wiki...
+<span class="m">==> Umbra Wiki is installed.
+==> 1. Start the local AI engine once (it then starts by itself):
+==>      sudo systemctl enable --now ollama
+==> 2. Open "Umbra Wiki" from your app launcher, or run: umbra-wiki
+==>    The welcome tour picks the AI model and the offline library with you.</span></pre>
+</div>
+<p class="note">"checking package integrity" is pacman verifying the signature with the key from step 1.
+<code>pacman -Qi umbra-wiki</code> then shows <code>Validated By: SHA-256 Sum Signature</code>.</p>
+
+<div class="grid2" style="margin-top:22px">
+  <div><img src="img/answer.png" alt="An answer with sources"><p class="caption">Answers cite their sources.</p></div>
+  <div><img src="img/themes-gallery.png" alt="Themes"><p class="caption">22 themes, backgrounds and transitions.</p></div>
+</div>
+
+<h2>Updates and removal</h2>
+<table>
+  <tr><th>TO</th><th>RUN</th></tr>
+  <tr><td>Update Umbra (with the rest of your system)</td><td><code>sudo pacman -Syu</code></td></tr>
+  <tr><td>Remove Umbra</td><td><code>sudo pacman -R umbra-wiki</code>, then, if you like, remove the two [umbra] lines from <code>/etc/pacman.conf</code> and the key: <code>sudo pacman-key --delete E50B101F98529A32564FDD3B37A6D2DA9E6A0F0B</code></td></tr>
+  <tr><td>Remove your Umbra data too</td><td>In Umbra: Settings → Danger zone → Uninstall, before removing the package (or delete <code>~/.config/umbra-wiki</code>, <code>~/.local/share/umbra-wiki</code> and <code>~/UmbraWiki</code>)</td></tr>
+</table>
+
+<h2>Voice input (optional)</h2>
+<p>Umbra can listen instead of reading: install <a href="https://voxtype.io">voxtype</a> from the AUR, for example with
+<code>yay -S voxtype-bin</code>, then run <code>voxtype setup --download --model base.en</code>. Hold <b>F9</b> in the Umbra
+window to talk.</p>
+
+<h2>Troubleshooting</h2>
+<details><summary>"signature is unknown trust" or "invalid or corrupted package"</summary>
+<p>The key from step 1 isn't trusted yet. Run both commands of step 1 again, then <code>sudo pacman -Sy umbra-wiki</code>.</p></details>
+<details><summary>"target not found: umbra-wiki"</summary>
+<p>pacman doesn't know the repository yet: check step 2 (the two lines at the end of <code>/etc/pacman.conf</code>),
+then run <code>sudo pacman -Sy umbra-wiki</code> again.</p></details>
+<details><summary>Umbra says CORE OFFLINE or NO MODEL</summary>
+<p>CORE OFFLINE: Ollama isn't running, see step 4. NO MODEL: pick or download a model in Umbra's Settings → AI model,
+or replay the welcome tour.</p></details>
+<details><summary>Is this the AUR?</summary>
+<p>Not yet. Umbra Wiki will also be published to the AUR as <code>umbra-wiki</code> as soon as AUR account registration
+reopens. This repository then stays available; you can use either.</p></details>
+
+<h2>Other ways to install</h2>
+<table>
+  <tr><td><b>Omarchy</b></td><td>Install <b>Omarchy Umbra</b> from the Omarchy plugin marketplace: a bar widget plus a guided setup.</td></tr>
+  <tr><td><b>Package file</b></td><td>Download the package from the <a href="https://github.com/umbraxc/omarchy-umbra/releases/latest">latest release</a> and install it with <code>sudo pacman -U</code> (no automatic updates).</td></tr>
+  <tr><td><b>Build it yourself</b></td><td>The recipe is in the main repository's <a href="https://github.com/umbraxc/omarchy-umbra/tree/main/aur"><code>aur/PKGBUILD</code></a>: <code>makepkg -si</code>.</td></tr>
+  <tr><td><b>AUR</b></td><td>Coming as <code>umbra-wiki</code> when AUR registration reopens.</td></tr>
+</table>
+
+<footer>
+  Umbra Wiki is open source under the MIT license · <a href="https://github.com/umbraxc/omarchy-umbra">github.com/umbraxc/omarchy-umbra</a> ·
+  General information for preparedness, not medical or professional advice.
+</footer>
+</div>
+<div class="hazard"></div>
+
+<script>
+  document.querySelectorAll(".copy").forEach((b) => b.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(b.dataset.copy);
+      b.textContent = "COPIED ✓"; b.classList.add("done");
+    } catch { b.textContent = "SELECT & COPY"; }
+    setTimeout(() => { b.textContent = "COPY"; b.classList.remove("done"); }, 1800);
+  }));
+</script>
+</body>
+</html>
