@@ -63,11 +63,16 @@
   th { color: var(--dim); font-weight: 400; letter-spacing: .15em; font-size: 11px; }
   code { color: var(--signal); background: var(--bg2); padding: 1px 5px; font-size: 13px; }
   .gtk td:first-child { width: 10em; color: var(--bright); }
+  .news h3 { margin: 0 0 6px; color: var(--signal); font-size: 16px; letter-spacing: .04em; }
+  .news h4 { margin: 14px 0 4px; color: var(--bright); font-size: 12px; letter-spacing: .25em; text-transform: uppercase; }
+  .news ul { margin: 0; padding-left: 18px; font-size: 13.5px; }
+  .news li { margin: 3px 0; }
+  .news-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
   details { margin: 10px 0; }
   summary { cursor: pointer; color: var(--bright); }
   footer { margin-top: 50px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--faint); }
   @media (max-width: 640px) {
-    .grid2 { grid-template-columns: 1fr; }
+    .grid2, .news-cols { grid-template-columns: 1fr; }
     .step { grid-template-columns: minmax(0, 1fr); }
     .step > :not(.num) { grid-column: 1; }
     h1 { font-size: 21px; }
@@ -95,6 +100,32 @@ updates like any other Arch software.
 
 <img class="hero" src="img/hero.png" alt="Umbra Wiki's start screen">
 <p class="caption">Umbra Wiki's start screen. More on <a href="https://github.com/umbraxc/omarchy-umbra">GitHub</a>.</p>
+
+<div class="card news" id="whats-new">
+  <h3>New: Umbra Wiki 3.1.1</h3>
+  <p class="why">Already have Umbra? Update it with the rest of your system; Umbra shows what's new the next time it opens:</p>
+  <div class="cmd"><pre><span class="p">$ </span>sudo pacman -Syu</pre>
+    <button class="copy" data-copy="sudo pacman -Syu">COPY</button></div>
+  <div class="news-cols">
+  <div><h4>New</h4><ul>
+    <li><b>Maps</b>: offline maps down to street level, country files, safety levels and waypoints</li>
+    <li><b>Field Kit</b>: medic tools, a live Sun and Moon, supplies, a Calendar and a password-locked Vault</li>
+    <li><b>Training</b>: Morse, radio, grid references, compass, and real field manuals to download</li>
+    <li><b>Signals &amp; Radar</b>: the Wi-Fi and Bluetooth signals around you, with a kill switch</li>
+    <li><b>Umbra knows you</b>: your profile, health notes, supplies and plans shape every answer; <b>Tab</b> for quick actions</li>
+    <li>Redesigned themes, a new profile page, history folders, achievements and first-look guides</li>
+    <li>Runs on <a href="#windows">Windows 11</a> too</li>
+  </ul></div>
+  <div><h4>Fixed</h4><ul>
+    <li>Typing no longer makes the prompt scroll or shows a double cursor</li>
+    <li>Holding a key (like Backspace) no longer stacks sounds</li>
+    <li>The status line no longer retypes itself on every key</li>
+    <li>Lists keep their scroll position instead of jumping to the top</li>
+    <li>Umbra no longer makes up shortcuts or features it doesn't have</li>
+    <li>Settings → Sound tells you when no sound player is installed, and how to fix it</li>
+  </ul></div>
+  </div>
+</div>
 
 <h2>Install in four steps</h2>
 <p>Open a terminal and run these one at a time. Each asks for your password
