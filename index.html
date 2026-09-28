@@ -204,6 +204,18 @@ then run <code>sudo pacman -Sy umbra-wiki</code> again.</p></details>
 <details><summary>Umbra says CORE OFFLINE or NO MODEL</summary>
 <p>CORE OFFLINE: Ollama isn't running, see step 4. NO MODEL: pick or download a model in Umbra's Settings → AI model,
 or replay the welcome tour.</p></details>
+<details><summary>Umbra has no sound</summary>
+<p>Umbra plays sounds with <code>pw-play</code> (package <code>pipewire-audio</code>) or, on PulseAudio systems,
+<code>paplay</code> (package <code>libpulse</code>). They're optional, so a minimal install may have neither. In order:</p>
+<ol>
+  <li>Check the speaker button in Umbra's top right is on, and the volume in Settings → Sound is above zero.</li>
+  <li>Open Settings → Sound. If it says <i>No sound player is installed</i>, run the command it shows.</li>
+  <li>Otherwise install one yourself: <code>sudo pacman -S --needed pipewire-audio</code> (most systems) or
+    <code>sudo pacman -S --needed libpulse</code> (PulseAudio). Then press <b>▶ TEST</b> in Settings → Sound; no restart needed.</li>
+  <li>Still silent: choose your speakers in Settings → Sound → Sound output, and check your system volume.</li>
+</ol>
+<p>The full checklist, with a one-line diagnostic command, is in the
+<a href="https://github.com/umbraxc/omarchy-umbra#no-sound">README</a>.</p></details>
 <details><summary>Is this the AUR?</summary>
 <p>Not yet. Umbra Wiki will also be published to the AUR as <code>umbra-wiki</code> as soon as AUR account registration
 reopens. This repository then stays available; you can use either.</p></details>
