@@ -68,6 +68,12 @@
   .news ul { margin: 0; padding-left: 18px; font-size: 13.5px; }
   .news li { margin: 3px 0; }
   .news-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+  .win-dl { text-align: center; }
+  .dl { display: inline-block; margin: 6px 0 12px; padding: 14px 26px; background: var(--signal); color: var(--bg);
+    font-weight: 800; letter-spacing: .14em; text-decoration: none; font-size: 15px; }
+  .dl:hover { background: var(--bright); }
+  details.wsl { margin-top: 26px; border: 1px solid var(--line); padding: 10px 16px; background: var(--bg1); }
+  details.wsl > summary { font-weight: 700; }
   details { margin: 10px 0; }
   summary { cursor: pointer; color: var(--bright); }
   footer { margin-top: 50px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--faint); }
@@ -96,7 +102,7 @@
 stored on your own computer, cites its sources, and keeps working with no internet.
 This page installs it from <b>[umbra]</b>, its signed pacman repository, so it installs and
 updates like any other Arch software.
-<b>On Windows 11?</b> Umbra runs there too: see <a href="#windows">Windows 11</a>.</p>
+<b>On Windows 11?</b> <a href="https://github.com/umbraxc/omarchy-umbra/releases/latest/download/Umbra-Wiki-Setup.exe">Download the Windows app</a> (<a href="#windows">more</a>).</p>
 
 <img class="hero" src="img/hero.png" alt="Umbra Wiki's start screen">
 <p class="caption">Umbra Wiki's start screen. More on <a href="https://github.com/umbraxc/omarchy-umbra">GitHub</a>.</p>
@@ -114,7 +120,7 @@ updates like any other Arch software.
     <li><b>Signals &amp; Radar</b>: the Wi-Fi and Bluetooth signals around you, with a kill switch</li>
     <li><b>Umbra knows you</b>: your profile, health notes, supplies and plans shape every answer; <b>Tab</b> for quick actions</li>
     <li>Redesigned themes, a new profile page, history folders, achievements and first-look guides</li>
-    <li>Runs on <a href="#windows">Windows 11</a> too</li>
+    <li>A native <a href="#windows">Windows 11 app</a> that updates itself</li>
   </ul></div>
   <div><h4>Fixed</h4><ul>
     <li>Typing no longer makes the prompt scroll or shows a double cursor</li>
@@ -216,6 +222,50 @@ installing umbra-wiki...
 </div>
 
 <h2 id="windows">Windows 11</h2>
+<p>Umbra Wiki is also a <b>native Windows app</b>: download the installer, run it, done. No Linux, no terminal,
+and no administrator rights needed.</p>
+
+<div class="card win-dl">
+  <a class="dl" href="https://github.com/umbraxc/omarchy-umbra/releases/latest/download/Umbra-Wiki-Setup.exe">↓ DOWNLOAD UMBRA WIKI FOR WINDOWS</a>
+  <p class="why">Umbra-Wiki-Setup.exe · version 3.1.1 · about 40 MB · Windows 11 (or Windows 10, 64-bit).
+  Always the newest version; checksums in <a href="https://github.com/umbraxc/omarchy-umbra/releases/latest">the release</a>
+  (<code>SHA256SUMS-windows.txt</code>).</p>
+</div>
+
+<div class="card step">
+  <div class="num">1</div>
+  <h3>Run the installer</h3>
+  <p class="why">Windows may say <b>"Windows protected your PC"</b> the first time: the installer isn't code-signed yet.
+  Click <b>More info</b>, then <b>Run anyway</b>. Every installer is built by GitHub from Umbra's public code.</p>
+</div>
+<div class="card step">
+  <div class="num">2</div>
+  <h3>Let it install Ollama</h3>
+  <p class="why">Keep <b>Install Ollama, the local AI engine</b> ticked (a free download of about 1 GB). It's what runs
+  Umbra's AI on your PC. Already have Ollama? The option doesn't appear.</p>
+</div>
+<div class="card step">
+  <div class="num">3</div>
+  <h3>Open Umbra Wiki</h3>
+  <p class="why">From the last page of the installer, or the Start menu. The welcome tour picks the AI model and the
+  offline library that suit your PC and downloads them in the background.</p>
+</div>
+
+<table class="gtk">
+  <tr><th colspan="2">GOOD TO KNOW</th></tr>
+  <tr><td>Updates</td><td>Automatic: once a day Umbra checks for a new version and offers to install it with one click.
+    It verifies the download, updates and reopens by itself, and everything of yours stays. (Settings → Help &amp; updates
+    switches the check off.)</td></tr>
+  <tr><td>What works</td><td>Everything, with two exceptions: Signals &amp; Radar shows Wi-Fi networks but not Bluetooth
+    devices and has no kill switch (use airplane mode), and voice input isn't available on Windows yet.</td></tr>
+  <tr><td>Graphics cards</td><td>Ollama uses NVIDIA and AMD Radeon cards on Windows by itself, for much faster answers.</td></tr>
+  <tr><td>Your files</td><td>The library is in <code>%USERPROFILE%\UmbraWiki</code>; settings and conversations in
+    <code>%APPDATA%\UmbraWiki</code> and <code>%LOCALAPPDATA%\UmbraWiki</code>.</td></tr>
+  <tr><td>Remove it</td><td>Umbra's Settings → Danger zone → Uninstall removes Umbra with your data. Windows' Settings →
+    Apps → Umbra Wiki removes only the app.</td></tr>
+</table>
+
+<details class="wsl"><summary>Or run the Linux version on Windows (WSL)</summary>
 <p>Windows 11 can run Linux apps in their own windows, next to your Windows apps, with <b>WSL</b> (Windows Subsystem
 for Linux). You install Arch Linux inside it, then Umbra from the same signed repository as above. It takes about
 20 minutes, most of it downloading. You need Windows 11 with its latest updates, about 15 GB of free disk space and
@@ -309,7 +359,9 @@ sudo systemctl enable --now ollama">COPY</button></div>
     all its data.</td></tr>
 </table>
 
-<h2>Updates and removal</h2>
+</details>
+
+<h2>Updates and removal (Arch Linux)</h2>
 <table>
   <tr><th>TO</th><th>RUN</th></tr>
   <tr><td>Update Umbra (with the rest of your system)</td><td><code>sudo pacman -Syu</code></td></tr>
@@ -349,7 +401,7 @@ reopens. This repository then stays available; you can use either.</p></details>
 
 <h2>Other ways to install</h2>
 <table>
-  <tr><td><b>Windows 11</b></td><td>Through WSL with Arch Linux: see <a href="#windows">Windows 11</a> above.</td></tr>
+  <tr><td><b>Windows 11</b></td><td><a href="https://github.com/umbraxc/omarchy-umbra/releases/latest/download/Umbra-Wiki-Setup.exe">Download the Windows app</a>, or run the Linux version through WSL: see <a href="#windows">Windows 11</a> above.</td></tr>
   <tr><td><b>Omarchy</b></td><td>Install <b>Omarchy Umbra</b> from the Omarchy plugin marketplace: a bar widget plus a guided setup.</td></tr>
   <tr><td><b>Package file</b></td><td>Download the package from the <a href="https://github.com/umbraxc/omarchy-umbra/releases/latest">latest release</a> and install it with <code>sudo pacman -U</code> (no automatic updates).</td></tr>
   <tr><td><b>Build it yourself</b></td><td>The recipe is in the main repository's <a href="https://github.com/umbraxc/omarchy-umbra/tree/main/aur"><code>aur/PKGBUILD</code></a>: <code>makepkg -si</code>.</td></tr>
