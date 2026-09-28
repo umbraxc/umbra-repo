@@ -62,6 +62,7 @@
   td, th { text-align: left; padding: 8px 10px; border-bottom: 1px dashed var(--line); vertical-align: top; }
   th { color: var(--dim); font-weight: 400; letter-spacing: .15em; font-size: 11px; }
   code { color: var(--signal); background: var(--bg2); padding: 1px 5px; font-size: 13px; }
+  .gtk td:first-child { width: 10em; color: var(--bright); }
   details { margin: 10px 0; }
   summary { cursor: pointer; color: var(--bright); }
   footer { margin-top: 50px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--faint); }
@@ -89,7 +90,8 @@
 <p class="lead">Umbra Wiki is an offline survival assistant: a local AI that answers from a library
 stored on your own computer, cites its sources, and keeps working with no internet.
 This page installs it from <b>[umbra]</b>, its signed pacman repository, so it installs and
-updates like any other Arch software.</p>
+updates like any other Arch software.
+<b>On Windows 11?</b> Umbra runs there too: see <a href="#windows">Windows 11</a>.</p>
 
 <img class="hero" src="img/hero.png" alt="Umbra Wiki's start screen">
 <p class="caption">Umbra Wiki's start screen. More on <a href="https://github.com/umbraxc/omarchy-umbra">GitHub</a>.</p>
@@ -163,7 +165,7 @@ Server = https://umbraxc.github.io/umbra-repo/$arch
  umbra downloading...
 resolving dependencies...
 Package (1)       New Version  Net Change  Download Size
-umbra/umbra-wiki  3.1.0-1        1.13 MiB       0.64 MiB
+umbra/umbra-wiki  3.1.1-2        6.56 MiB       4.38 MiB
 :: Proceed with installation? [Y/n] y
 checking keyring...
 <span class="ok">checking package integrity...</span>
@@ -181,6 +183,100 @@ installing umbra-wiki...
   <div><img src="img/answer.png" alt="An answer with sources"><p class="caption">Answers cite their sources.</p></div>
   <div><img src="img/themes-gallery.png" alt="Themes"><p class="caption">22 themes, backgrounds and transitions.</p></div>
 </div>
+
+<h2 id="windows">Windows 11</h2>
+<p>Windows 11 can run Linux apps in their own windows, next to your Windows apps, with <b>WSL</b> (Windows Subsystem
+for Linux). You install Arch Linux inside it, then Umbra from the same signed repository as above. It takes about
+20 minutes, most of it downloading. You need Windows 11 with its latest updates, about 15 GB of free disk space and
+8 GB of memory or more.</p>
+
+<div class="card step">
+  <div class="num">1</div>
+  <h3>Install WSL and Arch Linux</h3>
+  <p class="why">Right-click the Start button and choose <b>Terminal (Admin)</b>. Run:</p>
+  <div class="cmd"><pre><span class="p">PS&gt; </span>wsl --install --no-distribution
+<span class="p">PS&gt; </span>wsl --update
+<span class="p">PS&gt; </span>wsl --install archlinux</pre>
+    <button class="copy" data-copy="wsl --install --no-distribution
+wsl --update
+wsl --install archlinux">COPY</button></div>
+  <p class="why">If Windows asks to restart after the first line, restart, open Terminal (Admin) again and carry on.
+  The last line leaves you at an Arch Linux prompt as <code>root</code>.</p>
+</div>
+
+<div class="card step">
+  <div class="num">2</div>
+  <h3>Make your own user</h3>
+  <p class="why">At that Arch prompt, replace <code>alex</code> with the name you want (lower case, no spaces) in
+  each line:</p>
+  <div class="cmd"><pre><span class="p"># </span>pacman -Syu --noconfirm sudo
+<span class="p"># </span>useradd -m -G wheel alex
+<span class="p"># </span>passwd alex
+<span class="p"># </span>echo '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/wheel
+<span class="p"># </span>printf '[user]\ndefault=alex\n\n[boot]\nsystemd=true\n' > /etc/wsl.conf
+<span class="p"># </span>exit</pre>
+    <button class="copy" data-copy="pacman -Syu --noconfirm sudo
+useradd -m -G wheel alex
+passwd alex
+echo '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/wheel
+printf '[user]\ndefault=alex\n\n[boot]\nsystemd=true\n' > /etc/wsl.conf
+exit">COPY</button></div>
+  <p class="why"><code>passwd</code> asks for a password twice; nothing shows while you type. Then restart Arch
+  in PowerShell so it opens as your user:</p>
+  <div class="cmd"><pre><span class="p">PS&gt; </span>wsl --terminate archlinux
+<span class="p">PS&gt; </span>wsl -d archlinux</pre>
+    <button class="copy" data-copy="wsl --terminate archlinux
+wsl -d archlinux">COPY</button></div>
+</div>
+
+<div class="card step">
+  <div class="num">3</div>
+  <h3>Install Umbra</h3>
+  <div class="cmd"><pre><span class="p">$ </span>sudo pacman-key --init
+<span class="p">$ </span>sudo pacman-key --populate archlinux
+<span class="p">$ </span>curl -sL https://umbraxc.github.io/umbra-repo/umbra.gpg | sudo pacman-key --add -
+<span class="p">$ </span>sudo pacman-key --lsign-key E50B101F98529A32564FDD3B37A6D2DA9E6A0F0B
+<span class="p">$ </span>printf '\n[umbra]\nServer = https://umbraxc.github.io/umbra-repo/$arch\n' | sudo tee -a /etc/pacman.conf
+<span class="p">$ </span>sudo pacman -Syu --noconfirm umbra-wiki libpulse
+<span class="p">$ </span>sudo systemctl enable --now ollama</pre>
+    <button class="copy" data-copy="sudo pacman-key --init
+sudo pacman-key --populate archlinux
+curl -sL https://umbraxc.github.io/umbra-repo/umbra.gpg | sudo pacman-key --add -
+sudo pacman-key --lsign-key E50B101F98529A32564FDD3B37A6D2DA9E6A0F0B
+printf '\n[umbra]\nServer = https://umbraxc.github.io/umbra-repo/$arch\n' | sudo tee -a /etc/pacman.conf
+sudo pacman -Syu --noconfirm umbra-wiki libpulse
+sudo systemctl enable --now ollama">COPY</button></div>
+  <p class="why">The first two lines set up pacman's keys (a fresh WSL Arch doesn't have them yet); the next three
+  are steps 1 and 2 from the top of this page. <code>libpulse</code> gives Umbra its sounds on Windows, and the last
+  line starts Ollama, the local AI engine.</p>
+</div>
+
+<div class="card step">
+  <div class="num">4</div>
+  <h3>Open Umbra</h3>
+  <div class="cmd"><pre><span class="p">$ </span>umbra-wiki</pre>
+    <button class="copy" data-copy="umbra-wiki">COPY</button></div>
+  <p class="why">Umbra opens in its own window and its welcome tour downloads the AI model and a library. From then
+  on it's also in the Windows <b>Start menu</b> as Umbra Wiki (search "Umbra").</p>
+</div>
+
+<table class="gtk">
+  <tr><th colspan="2">GOOD TO KNOW</th></tr>
+  <tr><td>What works</td><td>Everything, sounds included, with two exceptions: the Signals &amp; Radar screen can't
+    reach Wi-Fi and Bluetooth (Windows keeps the radios), and voice input isn't set up.</td></tr>
+  <tr><td>Your files</td><td>In File Explorer: <b>Linux → archlinux → home → your name → UmbraWiki</b>. Exports,
+    cards and links open in your Windows apps.</td></tr>
+  <tr><td>Updates</td><td>Open Arch Linux from the Start menu and run <code>sudo pacman -Syu</code>.</td></tr>
+  <tr><td>NVIDIA graphics</td><td>With an up-to-date NVIDIA driver on Windows, run
+    <code>sudo pacman -S ollama-cuda</code> and <code>sudo systemctl restart ollama</code> for much faster
+    answers. Other graphics cards aren't used under WSL: the processor does the work.</td></tr>
+  <tr><td>8 GB of memory</td><td>Give Linux a little more room: create <code>C:\Users\&lt;you&gt;\.wslconfig</code> containing
+    <code>[wsl2]</code> and <code>memory=6GB</code> on two lines, then run <code>wsl --shutdown</code>.</td></tr>
+  <tr><td>No window appears</td><td>Update Windows, run <code>wsl --update</code> and <code>wsl --shutdown</code>
+    in PowerShell, then try again.</td></tr>
+  <tr><td>Remove it all</td><td><code>wsl --unregister archlinux</code> in PowerShell deletes Arch with Umbra and
+    all its data.</td></tr>
+</table>
 
 <h2>Updates and removal</h2>
 <table>
@@ -222,6 +318,7 @@ reopens. This repository then stays available; you can use either.</p></details>
 
 <h2>Other ways to install</h2>
 <table>
+  <tr><td><b>Windows 11</b></td><td>Through WSL with Arch Linux: see <a href="#windows">Windows 11</a> above.</td></tr>
   <tr><td><b>Omarchy</b></td><td>Install <b>Omarchy Umbra</b> from the Omarchy plugin marketplace: a bar widget plus a guided setup.</td></tr>
   <tr><td><b>Package file</b></td><td>Download the package from the <a href="https://github.com/umbraxc/omarchy-umbra/releases/latest">latest release</a> and install it with <code>sudo pacman -U</code> (no automatic updates).</td></tr>
   <tr><td><b>Build it yourself</b></td><td>The recipe is in the main repository's <a href="https://github.com/umbraxc/omarchy-umbra/tree/main/aur"><code>aur/PKGBUILD</code></a>: <code>makepkg -si</code>.</td></tr>
