@@ -108,12 +108,13 @@ updates like any other Arch software.
 <p class="caption">Umbra Wiki's start screen. More on <a href="https://github.com/umbraxc/omarchy-umbra">GitHub</a>.</p>
 
 <div class="card news" id="whats-new">
-  <h3>New: Umbra Wiki 3.2.2</h3>
+  <h3>New: Umbra Wiki 3.2.3</h3>
   <p class="why">Already have Umbra? Update it with the rest of your system; Umbra shows what's new the next time it opens:</p>
   <div class="cmd"><pre><span class="p">$ </span>sudo pacman -Syu</pre>
     <button class="copy" data-copy="sudo pacman -Syu">COPY</button></div>
   <div class="news-cols">
   <div><h4>New</h4><ul>
+    <li><b>Talk to Umbra, on Windows too</b>: hold F9 or click the microphone; your speech becomes text right on your computer, offline, with the same Whisper engine on Windows and Linux</li>
     <li><b>Umbra speaks</b>: answers read aloud with a natural offline voice while they're being written. Umbra's own voice is female or male, and every personality has its own</li>
     <li><b>LoRa mesh</b>: Meshtastic radios send messages, check-ins, positions and waypoints over kilometres with no phone network or internet. Umbra explains what to buy, walks you through the setup, then gives you a control board and the radios on your Maps</li>
     <li><b>Scenario drills</b>: 15 situations, from a dry tap on day three of a blackout to a flash flood, told in scored decisions in 3D ASCII scenes, with a debrief</li>
@@ -202,7 +203,7 @@ Server = https://umbraxc.github.io/umbra-repo/$arch
  umbra downloading...
 resolving dependencies...
 Package (1)       New Version  Net Change  Download Size
-umbra/umbra-wiki  3.2.2-1      108.78 MiB      77.07 MiB
+umbra/umbra-wiki  3.2.3-1      108.79 MiB      77.07 MiB
 :: Proceed with installation? [Y/n] y
 checking keyring...
 <span class="ok">checking package integrity...</span>
@@ -227,7 +228,7 @@ and no administrator rights needed.</p>
 
 <div class="card win-dl">
   <a class="dl" href="https://github.com/umbraxc/omarchy-umbra/releases/latest/download/Umbra-Wiki-Setup.exe">↓ DOWNLOAD UMBRA WIKI FOR WINDOWS</a>
-  <p class="why">Umbra-Wiki-Setup.exe · version 3.2.2 · Windows 11 (or Windows 10, 64-bit).
+  <p class="why">Umbra-Wiki-Setup.exe · version 3.2.3 · Windows 11 (or Windows 10, 64-bit).
   Always the newest version; checksums in <a href="https://github.com/umbraxc/omarchy-umbra/releases/latest">the release</a>
   (<code>SHA256SUMS-windows.txt</code>).</p>
 </div>
@@ -256,8 +257,8 @@ and no administrator rights needed.</p>
   <tr><td>Updates</td><td>Automatic: once a day Umbra checks for a new version and offers to install it with one click.
     It verifies the download, updates and reopens by itself, and everything of yours stays. (Settings → Help &amp; updates
     switches the check off.)</td></tr>
-  <tr><td>What works</td><td>Everything, with two exceptions: Signals &amp; Radar shows Wi-Fi networks but not Bluetooth
-    devices and has no kill switch (use airplane mode), and voice input isn't available on Windows yet.</td></tr>
+  <tr><td>What works</td><td>Everything, voice input included, with one exception: Signals shows Wi-Fi networks but not
+    Bluetooth devices and has no kill switch (use airplane mode).</td></tr>
   <tr><td>Graphics cards</td><td>Ollama uses NVIDIA and AMD Radeon cards on Windows by itself, for much faster answers.</td></tr>
   <tr><td>Your files</td><td>The library is in <code>%USERPROFILE%\UmbraWiki</code>; settings and conversations in
     <code>%APPDATA%\UmbraWiki</code> and <code>%LOCALAPPDATA%\UmbraWiki</code>.</td></tr>
